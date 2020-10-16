@@ -18,27 +18,15 @@ def exact_cover_bqm(problem_set, subsets):
     """Returns a BQM for an exact cover.
  
     An exact cover is a collection of subsets of `problem_set` that contain every 
-    element in `problem_set` exactly once. More formally, all elements of the 
-    exact cover are disjoint and the union of elements is the original problem_set. 
-
+    element in `problem_set` exactly once.
+    
     Args:
         problem_set : iterable
             An iterable of unique numbers
 
         subsets : list(iterable(numeric))
             A list of subsets of `problem_set` used to find an exact cover.
-
-    Returns:
-        :class:`.BinaryQuadraticModel`
-
     """
-    # Check that problem set is valid
-    orig_len = len(problem_set)
-    problem_set = set(problem_set)
-    if len(problem_set) != orig_len:
-        raise ValueError("problem_set should not contain any duplicates")
-
-    # Create BQM
     bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
 
     offset = 0
@@ -56,4 +44,3 @@ def exact_cover_bqm(problem_set, subsets):
     bqm.offset = offset
 
     return bqm
-    
