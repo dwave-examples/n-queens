@@ -29,9 +29,8 @@ def exact_cover_bqm(problem_set, subsets):
     """
     bqm = BinaryQuadraticModel({}, {}, 0, 'BINARY')
 
-    offset = 0
     for element in problem_set:
-        offset += 1
+        bqm.offset += 1
 
         for i in range(len(subsets)):    
             if element in subsets[i]:
@@ -40,7 +39,5 @@ def exact_cover_bqm(problem_set, subsets):
                 for j in range(i):         
                     if element in subsets[j]:
                         bqm.add_interaction(i, j, 2)
-
-    bqm.offset = offset
 
     return bqm

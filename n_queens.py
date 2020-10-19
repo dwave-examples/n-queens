@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import numpy as np
-
 from collections import Counter
 
+import numpy as np
 from dimod import BinaryQuadraticModel
 from dwave.system import LeapHybridSampler
 
@@ -83,10 +82,10 @@ def n_queens(n, sampler=None):
     """
 
     num_row_col_constraints = 2 * n
-    row_col_constraint_ids = { i for i in range(num_row_col_constraints) }
+    row_col_constraint_ids = set(range(num_row_col_constraints))
 
     num_diag_constraints = 4 * n - 6   # includes anti-diag constraints
-    diag_constraint_ids = { i for i in range(num_row_col_constraints, num_row_col_constraints + num_diag_constraints) }
+    diag_constraint_ids = set(range(num_row_col_constraints, num_row_col_constraints + num_diag_constraints))
 
     # Build subsets of constraint ids. Each subset will become a variable in our BQM.
     subsets = build_subsets(n)
