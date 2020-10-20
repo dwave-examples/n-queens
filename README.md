@@ -4,6 +4,8 @@ The [n-queens problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle) refers
 to the problem of placing n queens on an n*n chessboard, such that no two queens
 are able to attack each other.
 
+![6-queens Solution](6-queens-solution.png)
+
 This example demonstrates how to formulate the n-queens problem as a quadratic
 unconstrained binary optimization (QUBO) problem, which we then solve with
 dwave-system's LeapHybridSampler.
