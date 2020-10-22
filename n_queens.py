@@ -25,14 +25,15 @@ def build_subsets(n):
     """Returns a list of subsets of constraints corresponding to every 
     position on the chessboard. 
 
-    Each constraint is represented by a unique number (id). Each subset 
+    Each constraint is represented by a unique number (ID). Each subset 
     should contain:
-    1) Exactly one column constraint id (0 to n-1)
-    2) Exactly one row constraint id (n to 2*n-1)
-    3) At most one diagonal constraint id (2*n to 4*n-4)
-    4) At most one anti-diagonal constraint id (4*n-3 to 6*n-7)
+    1) Exactly one column constraint ID (0 to n-1).
+    2) Exactly one row constraint ID (n to 2*n-1).
+    3) At most one diagonal (top-left to bottom-right) constraint ID (2*n to
+       4*n-4).
+    4) At most one anti-diagonal (bottom-left to top-right) constraint ID (4*n-3
+       to 6*n-7).
     """
-
     subsets = []
     for x in range(n):
         for y in range(n): 
@@ -63,7 +64,6 @@ def handle_diag_constraints(bqm, subsets, diag_constraints):
     """Update bqm with diagonal (and anti-diagonal) constraints.
     Duplicates are penalized.
     """
-
     for constraint in diag_constraints:
         for i in range(len(subsets)):   
             if constraint in subsets[i]:
@@ -74,21 +74,20 @@ def handle_diag_constraints(bqm, subsets, diag_constraints):
 
 def n_queens(n, sampler=None):
     """Returns a potential solution to the n-queens problem in a list of sets,
-    each containing constraint ids representing a queen's location.
+    each containing constraint IDs representing a queen's location.
 
     Args:
-        n: Number of queens to place
+        n: Number of queens to place.
 
         sampler: A binary quadratic model sampler. Defaults to dwave-system's LeapHybridSampler.
     """
-
     num_row_col_constraints = 2 * n
     row_col_constraint_ids = set(range(num_row_col_constraints))
 
     num_diag_constraints = 4 * n - 6   # includes anti-diag constraints
     diag_constraint_ids = set(range(num_row_col_constraints, num_row_col_constraints + num_diag_constraints))
 
-    # Build subsets of constraint ids. Each subset will become a variable in our BQM.
+    # Build subsets of constraint IDs. Each subset will become a variable in our BQM.
     subsets = build_subsets(n)
             
     # Build BQM with only row/col constraints
@@ -100,21 +99,18 @@ def n_queens(n, sampler=None):
     if sampler is None:
         sampler = LeapHybridSampler()
 
-    response = sampler.sample(bqm)
-
-    # Get lowest energy sample
-    sample = response.first.sample
+    sampleset = sampler.sample(bqm)
+    sample = sampleset.first.sample
 
     return [subsets[i] for i in sample if sample[i]]
 
 def is_valid_solution(n, solution):
-    """Check that solution is valid by making sure all the constraints were
-    followed.
+    """Check that solution is valid by making sure all constraints were met.
 
     Args:
-        n: Number of queens in the problem
+        n: Number of queens in the problem.
         
-        solution: A list of sets, each containing constraint ids that represent 
+        solution: A list of sets, each containing constraint IDs that represent 
                   a queen's location.
     """
     count = Counter()
@@ -138,9 +134,9 @@ def is_valid_solution(n, solution):
     for i in range(2*n, 4*n - 6):
         if count[i] > 1:
             if i <= 4*n - 4:
-                print("Diagonal {} has {} queens.".format(i, count[i]))
+                print("Top-left to bottom-right diagonal {} has {} queens.".format(i, count[i]))
             else:
-                print("Anti-diagonal {} has {} queens.".format(i, count[i]))
+                print("Bottom-left to top-right diagonal {} has {} queens.".format(i, count[i]))
 
             return False
 
@@ -174,7 +170,7 @@ def plot_chessboard(n, queens):
             if constraint < n:
                 x = constraint
             elif constraint >= n and constraint < 2*n:
-                y = np.abs(constraint - (2*n - 1)) # Convert constraint id to row index
+                y = np.abs(constraint - (2*n - 1)) # Convert constraint ID to row index
         
         if x != -1 and y != -1:
             plt.text(x, y, u"\u2655", fontsize=fontsize, ha='center', 
@@ -213,7 +209,7 @@ if __name__ == "__main__":
         print("Solution image is large and may be difficult to view.")
         print("Plot settings in plot_chessboard() may need adjusting.")
 
-    print("Trying to place {} queens on a {}*{} chessboard.".format(n, n, n))
+    print("Trying to place {n} queens on a {n}*{n} chessboard.".format(n=n))
     solution = n_queens(n)
 
     if is_valid_solution(n, solution):

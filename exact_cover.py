@@ -17,12 +17,12 @@ from dimod import BinaryQuadraticModel
 def exact_cover_bqm(problem_set, subsets):  
     """Returns a BQM for an exact cover.
  
-    An exact cover is a collection of subsets of `problem_set` that contain every 
+    An exact cover is a collection of subsets of `problem_set` that contains every 
     element in `problem_set` exactly once.
     
     Args:
         problem_set : iterable
-            An iterable of unique numbers
+            An iterable of unique numbers.
 
         subsets : list(iterable(numeric))
             A list of subsets of `problem_set` used to find an exact cover.

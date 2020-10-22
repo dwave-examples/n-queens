@@ -17,7 +17,7 @@ control [4].
 
 This example demonstrates how to formulate the n-queens problem as a quadratic
 unconstrained binary optimization (QUBO) problem, which we then solve with
-dwave-system's LeapHybridSampler.
+Leap's hybrid solvers.
 
 ## Usage
 
@@ -27,7 +27,7 @@ To run this example:
 python n_queens.py
 ```
 
-The user is prompted to enter the number of queens they wish to place (n). It
+The program prompts the user to enter the number of queens (n) to place. It
 should be noted that larger n will take longer to run and we do not recommend
 running this example on n > 200.
 
@@ -37,21 +37,21 @@ directory.
 ## Code Overview
 
 We formulate the n-queens problem as a [generalized exact cover
-problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle#Related_problems)
-with four types of constraints:
+problem](https://en.wikipedia.org/wiki/Exact_cover) with four types of
+constraints:
 
 1) Exactly one queen in each column.
 2) Exactly one queen in each row.
-3) At most one queen in each diagonal.
-4) At most one queen in each anti-diagonal.
+3) At most one queen in each diagonal from top-left to bottom-right.
+4) At most one queen in each diagonal from bottom-left to top-right.
 
 Here is a brief overview of the code:
 
-* Represent each constraint with a unique number (id)
-* Represent each position on the chessboard with a subset of constraint ids
-* Form a binary quadratic model (BQM) using these subsets of constraints
-* Run the problem (solve the BQM)
-* Validate the solution
+* Represent each constraint with a unique number (ID).
+* Represent each position on the chessboard with a subset of constraint IDs.
+* Form a binary quadratic model (BQM) using these subsets of constraints.
+* Run the problem (solve the BQM).
+* Validate the solution.
 * Plot the solution on a chessboard and save the solution image file.
 
 ## Code Specifics
@@ -59,11 +59,11 @@ Here is a brief overview of the code:
 Some notes to consider:
 
 * Since there is exactly one queen on each row and column, we utilize a
-  generalized version of the exact cover algorithm (specified in [1]) to
-  handle the row and column constraints. This code can be found in
-  exact_cover.py. Diagonal and anti-diagonal constraints are handled separately.
+  generalized version of the exact cover algorithm (specified in [1]) to handle
+  the row and column constraints. This code can be found in exact_cover.py. The
+  diagonal constraints are handled separately in n_queens.py.
 
-* Each position on the chessboard (each subset of constraint ids) becomes a
+* Each position on the chessboard (each subset of constraint IDs) becomes a
   variable in the BQM. That means that there are n**2 variables.
 
 ## References
