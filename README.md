@@ -4,22 +4,20 @@ The [n-queens problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle) refers
 to the problem of placing n queens on an n*n chessboard, such that no two queens
 are able to attack each other.
 
+Here is an example solution for a 6-queens problem:
+
 ![6-queens Solution](6-queens-solution.png)
+
+Though the n-queens problem is more often studied theoretically, it has been
+shown to have its applications. For instance, in a system requiring deadlock
+prevention, solving the n-queens problem would be equivalent to finding a set of
+deadlock free paths [4]. Other practical applications utilizing the n-queens
+problem include parallel memory storage schemes, VLSI testing, and traffic
+control [4].
 
 This example demonstrates how to formulate the n-queens problem as a quadratic
 unconstrained binary optimization (QUBO) problem, which we then solve with
 dwave-system's LeapHybridSampler.
-
-Here is an example output for a 6-queens problem:
-
-```bash
-[[0. 0. 0. 1. 0. 0.]
- [1. 0. 0. 0. 0. 0.]
- [0. 0. 0. 0. 1. 0.]
- [0. 1. 0. 0. 0. 0.]
- [0. 0. 0. 0. 0. 1.]
- [0. 0. 1. 0. 0. 0.]]
-```
 
 ## Usage
 
@@ -28,6 +26,13 @@ To run this example:
 ```bash
 python n_queens.py
 ```
+
+The user is prompted to enter the number of queens they wish to place (n). It
+should be noted that larger n will take longer to run and we do not recommend
+running this example on n > 200.
+
+The solution image file ('n-queens-solution.png') will be saved in the root
+directory.
 
 ## Code Overview
 
@@ -47,7 +52,7 @@ Here is a brief overview of the code:
 * Form a binary quadratic model (BQM) using these subsets of constraints
 * Run the problem (solve the BQM)
 * Validate the solution
-* Print a matrix (representing the solution on a chessboard)
+* Plot the solution on a chessboard and save the solution image file.
 
 ## Code Specifics
 
@@ -71,6 +76,10 @@ http://www.nohuddleoffense.de/2019/01/20/dancing-links-algorithm-x-and-the-n-que
 
 [3] Wikipedia contributors, "Eight queens puzzle" Wikipedia, The Free
 Encyclopedia, https://en.wikipedia.org/wiki/Eight_queens_puzzle
+
+[4] Jordan Bell & Brett Stevens, "A survey of known results and research areas
+for n-queens",
+[doi.org/10.1016/j.disc.2007.12.043](https://www.sciencedirect.com/science/article/pii/S0012365X07010394)
 
 ## License
 
