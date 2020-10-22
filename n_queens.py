@@ -15,6 +15,7 @@
 from collections import Counter
 
 import numpy as np
+import matplotlib.pyplot as plt
 from dimod import BinaryQuadraticModel
 from dwave.system import LeapHybridSampler
 
@@ -145,18 +146,29 @@ def is_valid_solution(n, solution):
 
     return True
 
-def build_matrix_with_queens(n, queens):
-    """Returns a matrix of size n*n with 1s representing queens.
-    
-    Args:
-        n: Number of queens 
-
-        queens: A list of sets, each containing constraint ids that represent 
-                a queen's location.
+def plot_chessboard(n, queens):
+    """Create a chessboard with queens using matplotlib. Image is saved 
+    in the root directory. Returns the image file name.
     """
-    matrix = np.zeros((n,n))
+    chessboard = np.zeros((n,n))
+    chessboard[1::2,0::2] = 1
+    chessboard[0::2,1::2] = 1
 
-    for subset in queens:
+    # Adjust fontsize for readability
+    if n <= 10:
+        fontsize = 30
+    elif n <= 20:
+        fontsize = 10
+    else:
+        fontsize = 5
+    
+    plt.xticks(np.arange(n))
+    plt.yticks(np.arange(n))
+
+    plt.imshow(chessboard, cmap='binary')
+
+    # Place queens 
+    for subset in solution:
         x = y = -1
         for constraint in subset:
             if constraint < n:
@@ -165,13 +177,49 @@ def build_matrix_with_queens(n, queens):
                 y = np.abs(constraint - (2*n - 1)) # Convert constraint id to row index
         
         if x != -1 and y != -1:
-            matrix[y][x] = 1
+            plt.text(x, y, u"\u2655", fontsize=fontsize, ha='center', 
+                     va='center', color='black' if (x - y) % 2 == 0 else 'white')
 
-    return matrix
-    
+    # Save file in root directory
+    file_name = "{}-queens-solution.png".format(n)
+    plt.savefig(file_name)
+
+    return file_name
+
+def get_sanitized_input():
+    while True:
+        print("Enter the number of queens to place (n > 0):")
+        n = input()
+
+        try:
+            n = int(n)
+            if n <= 0:
+                print("Input must be greater than 0.")
+                continue
+            if n >= 200:
+                # Run but give a warning
+                print("Problems with large n will run very slowly.")
+            
+        except ValueError:
+            print("Input type must be int.")
+            continue
+
+        return n
+
 if __name__ == "__main__":
-    n = 10
+    n = get_sanitized_input()
+
+    if n > 20:
+        print("Solution image is large and may be difficult to view.")
+        print("Plot settings in plot_chessboard() may need adjusting.")
+
+    print("Trying to place {} queens on a {}*{} chessboard.".format(n, n, n))
     solution = n_queens(n)
-    is_valid_solution(n, solution) 
-    matrix = build_matrix_with_queens(n, solution)
-    print(matrix)
+
+    if is_valid_solution(n, solution):
+        print("Solution is valid.")
+    else:
+        print("Solution is invalid.")
+
+    file_name = plot_chessboard(n, solution) 
+    print("Chessboard created. See: {}".format(file_name))

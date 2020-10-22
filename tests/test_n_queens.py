@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import os
-import subprocess
 import sys
 import unittest
+from subprocess import Popen, PIPE ,STDOUT
 
 from dimod import ExactSolver
 
@@ -27,7 +27,21 @@ class TestSmoke(unittest.TestCase):
     def test_smoke(self):
         # check that nothing crashes
         demo_file = os.path.join(project_dir, 'n_queens.py')
-        subprocess.check_output([sys.executable, demo_file])
+        p = Popen([sys.executable, demo_file],
+                  stdout=PIPE, stdin=PIPE, stderr=STDOUT)
+        p.stdin.write(b'4')
+
+        output = p.communicate()[0]
+        output = str(output).upper()
+
+        # check that solution is valid
+        with self.subTest(msg="Verify if output contains 'Solution is valid.' \n"):
+            self.assertIn("Solution is valid.".upper(), output)
+
+        # check that solution image was saved
+        image_name = '4-queens-solution.png'
+        self.assertTrue(os.path.isfile(image_name))
+        os.remove(image_name)
 
     def test_4_queens(self):
         sampler = ExactSolver()
