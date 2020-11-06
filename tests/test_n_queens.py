@@ -62,3 +62,6 @@ class TestSmoke(unittest.TestCase):
             tries += 1
 
         self.assertTrue(valid)
+
+if __name__ == '__main__':
+    unittest.main()
