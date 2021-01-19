@@ -1,21 +1,12 @@
 version: 2.1
 
 orbs:
-  dwave: dwave/orb-examples@1.0.0
+  dwave: dwave/orb-examples@2
 
 workflows:
   version: 2.1
   tests:
     jobs:
-      - dwave/test-linux:
-          matrix:
-            parameters:
-              python-tag: ["3.5", "3.6", "3.7", "3.8", "3.9"]
-      - dwave/test-osx:
-          matrix:
-            parameters:
-              python-version: ["3.5.0", "3.6.0", "3.7.0", "3.8.0", "3.9.0"]
-      - dwave/test-win:
-          matrix:
-            parameters:
-              python-version: ["3.5.0", "3.6.0", "3.7.0", "3.8.0", "3.9.0"]
+      - dwave/test-linux
+      - dwave/test-osx
+      - dwave/test-win
