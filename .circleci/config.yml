@@ -10,3 +10,17 @@ workflows:
       - dwave/test-linux
       - dwave/test-osx
       - dwave/test-win
+
+  daily:
+    triggers:
+      - schedule:
+          cron: "0 15 * * *"
+          filters:
+            branches:
+              only:
+                - master
+                - main
+    jobs:
+      - dwave/test-linux
+      - dwave/test-osx
+      - dwave/test-win
