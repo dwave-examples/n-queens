@@ -1,3 +1,7 @@
+[![Linux/Mac/Windows build status](
+  https://circleci.com/gh/dwave-examples/n-queens.svg?style=svg)](
+  https://circleci.com/gh/dwave-examples/n-queens)
+
 # N Queens
 
 The [n-queens problem](https://en.wikipedia.org/wiki/Eight_queens_puzzle) refers
