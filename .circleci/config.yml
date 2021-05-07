@@ -21,6 +21,9 @@ workflows:
                 - master
                 - main
     jobs:
-      - dwave/test-linux
-      - dwave/test-osx
-      - dwave/test-win
+      - dwave/test-linux:
+          skip-int-tests: true
+      - dwave/test-osx:
+          skip-int-tests: true
+      - dwave/test-win:
+          skip-int-tests: true
