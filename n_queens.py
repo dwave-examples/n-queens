@@ -24,10 +24,10 @@ from dwave.system import LeapHybridSampler
 from exact_cover import exact_cover_bqm
 
 def build_subsets(n):
-    """Returns a list of subsets of constraints corresponding to every 
-    position on the chessboard. 
+    """Returns a list of subsets of constraints corresponding to every
+    position on the chessboard.
 
-    Each constraint is represented by a unique number (ID). Each subset 
+    Each constraint is represented by a unique number (ID). Each subset
     should contain:
     1) Exactly one column constraint ID (0 to n-1).
     2) Exactly one row constraint ID (n to 2*n-1).
@@ -38,14 +38,14 @@ def build_subsets(n):
     """
     subsets = []
     for x in range(n):
-        for y in range(n): 
+        for y in range(n):
             col = x
-            row = y + n 
+            row = y + n
 
             subset = {col, row}
 
             diag = x + y + (2*n - 1)
-            min_diag = 2*n 
+            min_diag = 2*n
             max_diag = 4*n - 4
 
             if diag >= min_diag and diag <= max_diag:
@@ -59,7 +59,7 @@ def build_subsets(n):
                 subset.add(anti_diag)
 
             subsets.append(subset)
-    
+
     return subsets
 
 def handle_diag_constraints(bqm, subsets, diag_constraints):
@@ -67,9 +67,9 @@ def handle_diag_constraints(bqm, subsets, diag_constraints):
     Duplicates are penalized.
     """
     for constraint in diag_constraints:
-        for i in range(len(subsets)):   
+        for i in range(len(subsets)):
             if constraint in subsets[i]:
-                for j in range(i):    
+                for j in range(i):
                     if constraint in subsets[j]:
                         bqm.add_interaction(i, j, 2)
     return bqm
@@ -91,7 +91,7 @@ def n_queens(n, sampler=None):
 
     # Build subsets of constraint IDs. Each subset will become a variable in our BQM.
     subsets = build_subsets(n)
-            
+
     # Build BQM with only row/col constraints
     bqm = exact_cover_bqm(row_col_constraint_ids, subsets)
 
@@ -101,7 +101,7 @@ def n_queens(n, sampler=None):
     if sampler is None:
         sampler = LeapHybridSampler()
 
-    sampleset = sampler.sample(bqm)
+    sampleset = sampler.sample(bqm, label='Example - N Queens')
     sample = sampleset.first.sample
 
     return [subsets[i] for i in sample if sample[i]]
@@ -111,8 +111,8 @@ def is_valid_solution(n, solution):
 
     Args:
         n: Number of queens in the problem.
-        
-        solution: A list of sets, each containing constraint IDs that represent 
+
+        solution: A list of sets, each containing constraint IDs that represent
                   a queen's location.
     """
     count = Counter()
@@ -145,7 +145,7 @@ def is_valid_solution(n, solution):
     return True
 
 def plot_chessboard(n, queens):
-    """Create a chessboard with queens using matplotlib. Image is saved 
+    """Create a chessboard with queens using matplotlib. Image is saved
     in the root directory. Returns the image file name.
     """
     chessboard = np.zeros((n,n))
@@ -159,13 +159,13 @@ def plot_chessboard(n, queens):
         fontsize = 10
     else:
         fontsize = 5
-    
+
     plt.xticks(np.arange(n))
     plt.yticks(np.arange(n))
 
     plt.imshow(chessboard, cmap='binary')
 
-    # Place queens 
+    # Place queens
     for subset in solution:
         x = y = -1
         for constraint in subset:
@@ -173,9 +173,9 @@ def plot_chessboard(n, queens):
                 x = constraint
             elif constraint >= n and constraint < 2*n:
                 y = np.abs(constraint - (2*n - 1)) # Convert constraint ID to row index
-        
+
         if x != -1 and y != -1:
-            plt.text(x, y, u"\u2655", fontsize=fontsize, ha='center', 
+            plt.text(x, y, u"\u2655", fontsize=fontsize, ha='center',
                      va='center', color='black' if (x - y) % 2 == 0 else 'white')
 
     # Save file in root directory
@@ -197,7 +197,7 @@ def get_sanitized_input():
             if n >= 200:
                 # Run but give a warning
                 print("Problems with large n will run very slowly.")
-            
+
         except ValueError:
             print("Input type must be int.")
             continue
@@ -219,5 +219,5 @@ if __name__ == "__main__":
     else:
         print("Solution is invalid.")
 
-    file_name = plot_chessboard(n, solution) 
+    file_name = plot_chessboard(n, solution)
     print("Chessboard created. See: {}".format(file_name))
